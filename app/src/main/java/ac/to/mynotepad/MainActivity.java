@@ -20,9 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private String uid = "-N-mnJWFEX7V0ojMBaqY";
-
-    //private FirebaseDatabase rootnote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
