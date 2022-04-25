@@ -38,10 +38,6 @@ public class AllMyNotes extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance().getReference("Information");
 
-        //FirebaseRecyclerOptions<Model> options = new FirebaseRecyclerOptions.Builder<Model>().setQuery(FirebaseDatabase.getInstance().getReference().child("Information"), Model.class).build();
-        //myAdapter=new MyAdapter(options);
-        //recyclerView.setAdapter(myAdapter);
-
         list = new ArrayList();
         myAdapter = new MyAdapter(this, list);
         recyclerView.setAdapter(myAdapter);
