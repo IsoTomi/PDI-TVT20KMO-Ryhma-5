@@ -21,31 +21,47 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Firebase related member objects
+    private DatabaseReference databaseRef;
+    private Database database;
+
+    // Buttons and widgets
+    private Button buttonSend;
+    private Button buttonShow;
+    private EditText editNotes;
+    private RecyclerView noteRecycler;
+
+    // Array list for storing note-data
+    private ArrayList<Note> noteList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Database conf
-        Database database = new Database();
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Information");
+        // Configure firebase
+        database = new Database();
+        databaseRef = FirebaseDatabase.getInstance().getReference("Information");
 
-        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Information");
+        // Button Views
+        buttonSend = findViewById(R.id.SendBtn);
+        buttonShow = findViewById(R.id.ShowBtn);
+        editNotes = findViewById(R.id.EditNotes);
 
-        // Buttons and widgets
-        Button buttonSend = findViewById(R.id.SendBtn);
-        Button buttonShow = findViewById(R.id.ShowBtn);
-        EditText editNotes = findViewById(R.id.editNotes);
-
-        RecyclerView noteRecycler = findViewById(R.id.NoteRecycler);;
+        // RecyclerView
+        noteRecycler = findViewById(R.id.NoteRecycler);
         noteRecycler.setHasFixedSize(true);
         noteRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        ArrayList<Note> list = new ArrayList();
-        MyAdapter myAdapter = new MyAdapter(this, list);
+        // ArrayList
+        noteList = new ArrayList();
+
+        // Adapter for recycler
+        MyAdapter myAdapter = new MyAdapter(this, noteList);
         noteRecycler.setAdapter(myAdapter);
 
-        // Creating a new note
+        // Create a new note
         buttonSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -72,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Note note = dataSnapshot.getValue(Note.class);
-                    list.add(note);
+                    noteList.add(note);
                 }
                 myAdapter.notifyDataSetChanged();
             }

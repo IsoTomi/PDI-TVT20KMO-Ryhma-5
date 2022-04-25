@@ -12,7 +12,7 @@
         android:layout_height="70dp"
         android:layout_marginBottom="8dp"
         android:text="add"
-        app:layout_constraintBottom_toTopOf="@+id/editNotes"
+        app:layout_constraintBottom_toTopOf="@+id/EditNotes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editNotes"
+        android:id="@+id/EditNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
