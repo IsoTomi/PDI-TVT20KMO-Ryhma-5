@@ -1,6 +1,9 @@
 package ac.to.mynotepad;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,30 +11,44 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 //Firebase
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private String uid = "-N-mnJWFEX7V0ojMBaqY";
 
-    private FirebaseDatabase rootnote;
-    private DatabaseReference reference;
+    //private FirebaseDatabase rootnote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Database conf
+        // Database conf
         Database database = new Database();
-        reference = FirebaseDatabase.getInstance().getReference("Notes");
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("Information");
 
-        //Buttons and widgets
+        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Information");
+
+        // Buttons and widgets
         Button buttonSend = findViewById(R.id.SendBtn);
         Button buttonShow = findViewById(R.id.ShowBtn);
-        final EditText editNotes = findViewById(R.id.editNotes);
+        EditText editNotes = findViewById(R.id.editNotes);
 
-        //Creating new note
+        RecyclerView noteRecycler = findViewById(R.id.NoteRecycler);;
+        noteRecycler.setHasFixedSize(true);
+        noteRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        ArrayList<Note> list = new ArrayList();
+        MyAdapter myAdapter = new MyAdapter(this, list);
+        noteRecycler.setAdapter(myAdapter);
+
+        // Creating a new note
         buttonSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -50,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             OpenActivity();
+            }
+        });
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Note note = dataSnapshot.getValue(Note.class);
+                    list.add(note);
+                }
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
