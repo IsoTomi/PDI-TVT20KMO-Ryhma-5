@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,43 +33,26 @@ public class MainActivity extends AppCompatActivity {
         Database database = new Database();
         reference = FirebaseDatabase.getInstance().getReference("Notes");
         //Buttons and widgets
-        Button button1 = findViewById(R.id.SendBtn);
-        Button button2 = findViewById(R.id.ShowBtn);
+        Button buttonSend = findViewById(R.id.SendBtn);
         Button button3 = findViewById(R.id.CreateNew);
-        final TextView textView = findViewById(R.id.show);
         final EditText editNotes = findViewById(R.id.editNotes);
 
-        //Timestamp
-        Long tsLong = System.currentTimeMillis()/1000;
-        String ts = tsLong.toString();
-        //Creating new note!
-        button1.setOnClickListener(new View.OnClickListener() {
+        //Creating new note
+        buttonSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Information inf = new Information(editNotes.getText().toString());
-                database.add(inf);
+                String text = editNotes.getText().toString();
+                Log.d("TOMI", text);
+
+                if (!text.matches("")) {
+                    Information inf = new Information(text);
+                    database.add(inf);
+                }
+
             }
         });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reference = FirebaseDatabase.getInstance().getReference("Information");
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot datasnapshot) {
-                        String note = datasnapshot.child(uid).getValue().toString();
-                        //String noteid = datasnapshot.child("noteId").getValue().toString();
-                        textView.setText(note);
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-        });
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
