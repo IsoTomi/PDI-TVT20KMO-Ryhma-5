@@ -34,6 +34,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Note note = list.get(position);
         holder.note.setText(note.getNote());
+        holder.dateAndTime.setText(note.getCurrentDate() + ' ' +  note.getCurrentTime());
     }
 
     @Override
@@ -42,13 +43,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
-        TextView note;
+        TextView note, dateAndTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             note = itemView.findViewById(R.id.tvNote);
+            dateAndTime = itemView.findViewById(R.id.tvDateTime);
         }
     }
 }

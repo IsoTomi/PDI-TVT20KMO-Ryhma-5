@@ -1,62 +1,153 @@
 package ac.to.mynotepad;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 //Firebase
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    private String uid = "-N-mnJWFEX7V0ojMBaqY";
 
-    private FirebaseDatabase rootnote;
-    private DatabaseReference reference;
+    // Firebase related member objects
+    private DatabaseReference databaseRef;
+    private Database database;
+    String uid;
+
+    // Buttons and widgets
+    private Button buttonSend;
+    private EditText editNotes;
+    private RecyclerView noteRecycler;
+    LinearLayoutManager linearLayoutManager;
+
+    // Array list for storing note-data
+    private ArrayList<Note> noteList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Database conf
-        Database database = new Database();
-        reference = FirebaseDatabase.getInstance().getReference("Notes");
+        // Configure firebase
+        database = new Database();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseRef = FirebaseDatabase.getInstance().getReference("")
+                .child("users").child(uid).child("notes");
 
-        //Buttons and widgets
-        Button buttonSend = findViewById(R.id.SendBtn);
-        Button buttonShow = findViewById(R.id.ShowBtn);
-        final EditText editNotes = findViewById(R.id.editNotes);
+        // Button Views
+        buttonSend = findViewById(R.id.SendBtn);
+        editNotes = findViewById(R.id.EditNotes);
 
-        //Creating new note
+        // RecyclerView
+        noteRecycler = findViewById(R.id.NoteRecycler);
+        noteRecycler.setHasFixedSize(true);
+        noteRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+
+        // ArrayList
+        noteList = new ArrayList();
+
+        // Adapter for recycler
+        MyAdapter myAdapter = new MyAdapter(this, noteList);
+        noteRecycler.setAdapter(myAdapter);
+
+        // Create a new note
         buttonSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 String text = editNotes.getText().toString();
 
+                // Check if the EditText is empty.
                 if (!text.matches("")) {
-                    Information inf = new Information(text);
-                    database.add(inf);
+                    noteList.clear();
+
+                    // Get time
+                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+                            .format(new Date());
+                    String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                            .format(new Date());
+
+                    Note note = new Note(text, currentDate, currentTime);
+                    database.add(note, uid);
                 }
+
+                hideKeyboard();
+                editNotes.setText("");
 
             }
         });
 
-        buttonShow.setOnClickListener(new View.OnClickListener() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-            OpenActivity();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Note note = dataSnapshot.getValue(Note.class);
+                    noteList.add(note);
+                }
+                myAdapter.notifyDataSetChanged();
+                noteRecycler.scrollToPosition(noteList.size() - 1);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
 
-    public void OpenActivity() {
-        Intent intent = new Intent(this, AllMyNotes.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemLogOut:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public  void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+
+        if (view == null) {
+            view = new View(this);
+        }
+
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 
