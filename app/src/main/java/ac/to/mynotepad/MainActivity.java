@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // Firebase related member objects
     private DatabaseReference databaseRef;
     private Database database;
+    String uid;
 
     // Buttons and widgets
     private Button buttonSend;
@@ -46,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Configure firebase
         database = new Database();
-        databaseRef = FirebaseDatabase.getInstance().getReference("Information");
+        uid = uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        databaseRef = FirebaseDatabase.getInstance().getReference("")
+                .child("users").child(uid).child("notes");
 
         // Button Views
         buttonSend = findViewById(R.id.SendBtn);
@@ -73,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 String text = editNotes.getText().toString();
 
                 if (!text.matches("")) {
-                    Information inf = new Information(text);
-                    database.add(inf);
+                    Information info = new Information(text);
+                    database.add(info, uid);
                 }
 
             }
