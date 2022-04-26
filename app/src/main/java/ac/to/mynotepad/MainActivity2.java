@@ -16,7 +16,7 @@ import ac.to.mynotepad.R;
 public class MainActivity2 extends AppCompatActivity {
 
     Button btnLogOut;
-    FirebaseAuth mAuth;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +24,18 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         btnLogOut = findViewById(R.id.btnLogout);
-        mAuth = FirebaseAuth.getInstance();
+
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user == null) {
+            startActivity(new Intent(MainActivity2.this, LoginActivity.class));
+        } else {
+            startActivity(new Intent(MainActivity2.this, MainActivity.class));
+        }
 
         btnLogOut.setOnClickListener(view -> {
-            mAuth.signOut();
+            auth.signOut();
             startActivity(new Intent(MainActivity2.this, LoginActivity.class));
         });
     }
@@ -35,7 +43,7 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             startActivity(new Intent(MainActivity2.this, LoginActivity.class));
         }
