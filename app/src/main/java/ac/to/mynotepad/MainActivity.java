@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonSend;
     private EditText editNotes;
     private RecyclerView noteRecycler;
+    LinearLayoutManager linearLayoutManager;
 
     // Array list for storing note-data
     private ArrayList<Note> noteList;
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         noteRecycler.setHasFixedSize(true);
         noteRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        //noteRecycler.setLayoutManager(linearLayoutManager);
+
         // ArrayList
         noteList = new ArrayList();
 
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                 hideKeyboard();
                 editNotes.setText("");
+                linearLayoutManager.setStackFromEnd(true);
             }
         });
 
@@ -93,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     noteList.add(note);
                 }
                 myAdapter.notifyDataSetChanged();
+                noteRecycler.scrollToPosition(noteList.size() - 1);
             }
 
             @Override
