@@ -13,15 +13,10 @@ public class Database
 
     public Database() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        databaseReference = db.getReference(""/*Information.class.getSimpleName()*/);
+        databaseReference = db.getReference("");
     }
 
     public Task<Void> add(Information info, String uid) {
-        //String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         return databaseReference.child("users").child(uid).child("notes").push().setValue(info);
     }
-
-    /*public Task<Void> add(Information inf) {
-        return databaseReference.push().setValue(inf);
-    }*/
 }

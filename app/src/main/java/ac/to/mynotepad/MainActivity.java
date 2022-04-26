@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Buttons and widgets
     private Button buttonSend;
-    private Button buttonShow;
     private EditText editNotes;
     private RecyclerView noteRecycler;
 
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Button Views
         buttonSend = findViewById(R.id.SendBtn);
-        buttonShow = findViewById(R.id.ShowBtn);
         editNotes = findViewById(R.id.EditNotes);
 
         // RecyclerView
@@ -80,13 +78,6 @@ public class MainActivity extends AppCompatActivity {
                     database.add(info, uid);
                 }
 
-            }
-        });
-
-        buttonShow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            OpenActivity();
             }
         });
 
