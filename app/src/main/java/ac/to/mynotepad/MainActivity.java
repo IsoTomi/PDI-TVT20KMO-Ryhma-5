@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 //Firebase
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
                     database.add(info, uid);
                 }
 
+                hideKeyboard();
+                editNotes.setText("");
             }
         });
 
@@ -117,9 +121,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void OpenActivity() {
-        Intent intent = new Intent(this, AllMyNotes.class);
-        startActivity(intent);
+    public /*static*/ void hideKeyboard(/*Activity activity*/) {
+        InputMethodManager imm = (InputMethodManager) /*activity*/this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        //Find the currently focused view, so we can grab the correct window token from it.
+
+        View view = /*activity*/this.getCurrentFocus();
+
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(/*activity*/this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
 
