@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Configure firebase
         database = new Database();
-        uid = uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseRef = FirebaseDatabase.getInstance().getReference("")
                 .child("users").child(uid).child("notes");
 
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
-        //noteRecycler.setLayoutManager(linearLayoutManager);
 
         // ArrayList
         noteList = new ArrayList();
@@ -81,13 +80,14 @@ public class MainActivity extends AppCompatActivity {
                 String text = editNotes.getText().toString();
 
                 if (!text.matches("")) {
+                    noteList.clear();
                     Information info = new Information(text);
                     database.add(info, uid);
                 }
 
                 hideKeyboard();
                 editNotes.setText("");
-                linearLayoutManager.setStackFromEnd(true);
+
             }
         });
 
@@ -128,17 +128,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public /*static*/ void hideKeyboard(/*Activity activity*/) {
-        InputMethodManager imm = (InputMethodManager) /*activity*/this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    public  void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
 
-        //Find the currently focused view, so we can grab the correct window token from it.
-
-        View view = /*activity*/this.getCurrentFocus();
-
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
         if (view == null) {
-            view = new View(/*activity*/this);
+            view = new View(this);
         }
+
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
