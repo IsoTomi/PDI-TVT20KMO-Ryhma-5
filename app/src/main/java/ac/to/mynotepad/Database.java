@@ -16,7 +16,7 @@ public class Database
         databaseReference = db.getReference("");
     }
 
-    public Task<Void> add(Information info, String uid) {
-        return databaseReference.child("users").child(uid).child("notes").push().setValue(info);
+    public Task<Void> add(Note note, String uid) {
+        return databaseReference.child("users").child(uid).child("notes").push().setValue(note);
     }
 }

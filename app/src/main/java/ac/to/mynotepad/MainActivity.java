@@ -23,7 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,10 +82,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String text = editNotes.getText().toString();
 
+                // Check if the EditText is empty.
                 if (!text.matches("")) {
                     noteList.clear();
-                    Information info = new Information(text);
-                    database.add(info, uid);
+
+                    // Get time
+                    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+                            .format(new Date());
+                    String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                            .format(new Date());
+
+                    Note note = new Note(text, currentDate, currentTime);
+                    database.add(note, uid);
                 }
 
                 hideKeyboard();
