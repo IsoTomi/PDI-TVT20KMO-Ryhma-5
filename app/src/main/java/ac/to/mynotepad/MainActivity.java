@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 //Firebase
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,19 +32,22 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     // Firebase related member objects
-    private DatabaseReference databaseRef;
-    private Database database;
+    DatabaseReference databaseRef;
+    Database database;
     String uid;
 
     // Buttons and widgets
-    private Button buttonSend;
-    private EditText editNotes;
-    private RecyclerView noteRecycler;
+    Button buttonSend;
+    EditText editNotes;
+    TextView tvEmpty;
+    RecyclerView noteRecycler;
     LinearLayoutManager linearLayoutManager;
 
     // Array list for storing note-data
-    private ArrayList<Note> noteList;
+    ArrayList<Note> noteList;
 
+    // Adapter for RecyclerView
+    MyAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         buttonSend = findViewById(R.id.SendBtn);
         editNotes = findViewById(R.id.EditNotes);
 
+        // TextView
+        tvEmpty = findViewById(R.id.tv_empty);
+
         // RecyclerView
         noteRecycler = findViewById(R.id.NoteRecycler);
         noteRecycler.setHasFixedSize(true);
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         noteList = new ArrayList();
 
         // Adapter for recycler
-        MyAdapter myAdapter = new MyAdapter(this, noteList);
+        myAdapter = new MyAdapter(this, noteList, tvEmpty);
         noteRecycler.setAdapter(myAdapter);
 
         // Create a new note
