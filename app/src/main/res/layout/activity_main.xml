@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
     tools:context=".MainActivity">
 
 
@@ -28,7 +29,7 @@
         android:text="No data found"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/yellow"
         android:gravity="center"
         android:visibility="gone"/>
 
@@ -47,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:textColor="@color/cardview_dark_background"
             android:text="Add" />
 
         <EditText
@@ -57,6 +59,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:hint="Write a note here"
+            android:textColor="@color/yellow"
             android:inputType="textMultiLine"
             android:lines="3"
             android:minHeight="48dp"
