@@ -27,9 +27,6 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".AllMyNotes"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>
