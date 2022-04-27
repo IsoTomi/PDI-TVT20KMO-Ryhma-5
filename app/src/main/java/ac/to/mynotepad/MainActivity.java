@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     // Buttons and widgets
     Button buttonSend;
     EditText editNotes;
-    TextView tvEmpty;
     RecyclerView noteRecycler;
     LinearLayoutManager linearLayoutManager;
 
@@ -64,9 +63,6 @@ public class MainActivity extends AppCompatActivity {
         buttonSend = findViewById(R.id.SendBtn);
         editNotes = findViewById(R.id.EditNotes);
 
-        // TextView
-        tvEmpty = findViewById(R.id.tv_empty);
-
         // RecyclerView
         noteRecycler = findViewById(R.id.NoteRecycler);
         noteRecycler.setHasFixedSize(true);
@@ -79,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         noteList = new ArrayList();
 
         // Adapter for recycler
-        myAdapter = new MyAdapter(this, noteList, tvEmpty);
+        myAdapter = new MyAdapter(this, noteList);
         noteRecycler.setAdapter(myAdapter);
 
         // Create a new note

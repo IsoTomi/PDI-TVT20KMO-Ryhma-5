@@ -27,20 +27,18 @@ import java.util.Observable;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    
+
     Activity activity;
     ArrayList<Note> list;
-    TextView tvEmpty;
     NoteModel noteModel;
     boolean isEnable = false;
     boolean isSelectAll = false;
     ArrayList<Note> selectList = new ArrayList<Note>();
 
-    public MyAdapter(Activity activity, ArrayList<Note> list, TextView tvEmpty) {
+    public MyAdapter(Activity activity, ArrayList<Note> list) {
 
         this.activity = activity;
         this.list = list;
-        this.tvEmpty = tvEmpty;
     }
 
     @NonNull
@@ -103,11 +101,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
                                     for (Note note : selectList) {
                                         list.remove(note);
-                                    }
-
-                                    // Is the note list empty?
-                                    if (list.size() == 0) {
-                                        tvEmpty.setVisibility(View.VISIBLE);
                                     }
 
                                     // Finish action mode
