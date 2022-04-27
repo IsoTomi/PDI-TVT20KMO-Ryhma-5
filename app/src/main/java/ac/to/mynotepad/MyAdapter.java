@@ -27,8 +27,7 @@ import java.util.Observable;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-
-    Context context;
+    
     Activity activity;
     ArrayList<Note> list;
     TextView tvEmpty;
@@ -37,8 +36,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     boolean isSelectAll = false;
     ArrayList<Note> selectList = new ArrayList<Note>();
 
-    public MyAdapter(Activity activity/*Context context*/, ArrayList<Note> list, TextView tvEmpty) {
-        //this.context = context;
+    public MyAdapter(Activity activity, ArrayList<Note> list, TextView tvEmpty) {
+
         this.activity = activity;
         this.list = list;
         this.tvEmpty = tvEmpty;
