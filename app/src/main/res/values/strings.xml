@@ -10,4 +10,8 @@
     <string name="login_button">Login</string>
     <string name="not_registered">Not registered yet?</string>
     <string name="register_here">Register here</string>
+    <string name="delete_menu_item">Delete</string>
+    <string name="select_all_menu_item">Select All</string>
+    <string name="logout_menu_item">Log out</string>
+    <string name="add_button">Add</string>
 </resources>
